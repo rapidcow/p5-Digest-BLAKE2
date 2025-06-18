@@ -69,6 +69,7 @@ my $build = Module::Build::Pluggable->new(
     c_source             => ['stringencoders'],
     xs_files             => \%xs_files,
     extra_compiler_flags => [qw/-std=c99/],
+    extra_linker_flags   => [qw/-lb2/],
 
     no_index => { 'directory' => [ 'inc', 'author' ] },
 

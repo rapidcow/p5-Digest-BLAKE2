@@ -7,7 +7,7 @@
 
 #undef ALIGN
 #undef LIKELY
-#include "../blake2/sse/blake2x.c"
+#include <blake2.h>
 #include "modp_b16.h"
 #include "modp_b64.h"
 #include "modp_b64w.h"
