@@ -98,6 +98,23 @@ for my $algorithm (keys %algorithm_results) {
             $instance->add($target);
             is($instance->digest, pack('H*', $expected_hex));
         }
+
+        # The following test is the same, except we test
+        # the instance method to see the previous state has
+        # been properly cleared and does not affects the hash.
+        {
+            my $persistent_instance = $module_name->new;
+            $persistent_instance->add("JUNK");
+            for my $target (keys %results) {
+                my $expected_hex = $results{$target};
+
+                $persistent_instance = $persistent_instance->new;
+                $persistent_instance->add($target);
+                my $digest = $persistent_instance->digest;
+                my $expect = pack('H*', $expected_hex);
+                is($digest, $expect, "$algorithm, instance new()");
+            }
+        }
     };
 } ## end for my $algorithm (keys %algorithm_results)
 
