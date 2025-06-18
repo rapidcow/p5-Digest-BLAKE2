@@ -61,6 +61,10 @@ sub digest {
 
 1;
 
+__END__
+
+=encoding UTF-8
+
 =head1 NAME
 
 Digest::BLAKE2 - Perl XS interface to the BLAKE2 algorithms
@@ -160,4 +164,5 @@ Copyright (C) Tasuku SUENAGA a.k.a. gunyarakun
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
+
 =cut
