@@ -30,7 +30,7 @@ sub new {
     my ($class, $algorithm) = @_;
     # $instance->new( ... ) resets the state of the hash
     # context as an instance method.  See perldoc Digest.
-    if (blessed ($class)) {
+    if (blessed($class)) {
         my $self = $class;
         $self->{instance}->new();
         return $self;
@@ -46,7 +46,10 @@ sub new {
 
 sub clone {
     my $self = shift;
-    $self->{instance}->clone(@_);
+    my $class = ref($self);
+    bless +{
+        $self->{instance}->clone(@_);
+    }, $class;
 }
 
 sub add {
