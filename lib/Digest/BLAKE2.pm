@@ -6,6 +6,7 @@ use warnings;
 our $VERSION = '0.02';
 
 use parent qw/Exporter Digest::base/;
+use Scalar::Util qw/blessed/;
 
 use Digest::BLAKE2b
   qw/blake2b blake2b_hex blake2b_base64 blake2b_base64url blake2b_ascii85/;
@@ -27,6 +28,13 @@ our @EXPORT_OK = qw/
 
 sub new {
     my ($class, $algorithm) = @_;
+    # $instance->new( ... ) resets the state of the hash
+    # context as an instance method.  See perldoc Digest.
+    if (blessed($class)) {
+        my $self = $class;
+        $self->{instance}->new();
+        return $self;
+    }
     $algorithm ||= 'b';
     unless ($algorithm =~ /^(blake2|BLAKE2)?((b|s)p?)$/) {
         die 'Invalid algorithm.';
