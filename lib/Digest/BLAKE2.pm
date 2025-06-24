@@ -46,7 +46,10 @@ sub new {
 
 sub clone {
     my $self = shift;
-    $self->{instance}->clone(@_);
+    my $class = ref($self);
+    bless +{
+        $self->{instance}->clone(@_);
+    }, $class;
 }
 
 sub add {
