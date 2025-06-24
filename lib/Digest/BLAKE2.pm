@@ -48,7 +48,7 @@ sub clone {
     my $self = shift;
     my $class = ref($self);
     bless +{
-        $self->{instance}->clone(@_);
+        instance => $self->{instance}->clone(@_),
     }, $class;
 }
 
