@@ -57,6 +57,12 @@ unless ($@) {
     };
 }
 
+# https://github.com/Perl/perl5/issues/16200#issuecomment-544092140
+sub starts_with {
+    my ($base, $prefix) = @_;
+    rindex($base, $prefix, 0) == 0;
+}
+
 for my $algorithm (keys %algorithm_results) {
     my %results;
     @results{@targets} = @{ $algorithm_results{$algorithm} };
@@ -114,6 +120,26 @@ for my $algorithm (keys %algorithm_results) {
                 my $expect = pack('H*', $expected_hex);
                 is($digest, $expect, "$algorithm, instance new()");
             }
+        }
+
+        # Repeat the same for clone().  We exploit the fact
+        # that the first string is a prefix of the second.
+        {
+            my ($short_str, $long_str) = @targets;
+            starts_with($long_str, $short_str) or die "Assertion failed";
+
+            my $instance = $module_name->new;
+            $instance->add($short_str);
+            my $instcopy = $instance->clone;
+            $instcopy->add(substr($long_str, length $short_str));
+
+            # Postpone inspection of the $short_digest so
+            # the side effects of clone() would be visible
+            my $short_digest = $instance->digest;
+            my $long_digest = $instcopy->digest;
+
+            is($short_digest, $results{$short_str}, "$algorithm, cloned instance");
+            is($long_digest, $results{$long_str}, "$algorithm, clone instance");
         }
     };
 } ## end for my $algorithm (keys %algorithm_results)
