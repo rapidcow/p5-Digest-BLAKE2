@@ -138,8 +138,11 @@ for my $algorithm (keys %algorithm_results) {
             my $short_digest = $instance->digest;
             my $long_digest = $instcopy->digest;
 
-            is($short_digest, $results{$short_str}, "$algorithm, cloned instance");
-            is($long_digest, $results{$long_str}, "$algorithm, clone instance");
+            my $short_expect = pack('H*', $results{$short_str});
+            my $long_expect = pack('H*', $results{$long_str});
+
+            is($short_digest, $short_expect, "$algorithm, cloned instance");
+            is($long_digest, $long_expect, "$algorithm, clone instance");
         }
     };
 } ## end for my $algorithm (keys %algorithm_results)
